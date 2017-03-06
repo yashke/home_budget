@@ -5,6 +5,11 @@ var config = {
   entry: {
     'index': ['../../src/index.js']
   },
+  module: {
+    loaders: [
+      { test: /\.js$/, exclude: /node_modules/, loaders: ["react-hot-loader", "babel-loader"] }
+    ]
+  },
   output: {
     path: __dirname + '/public/assets',
     filename: "[name].js",
