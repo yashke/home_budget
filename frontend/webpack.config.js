@@ -8,7 +8,7 @@ var config = {
   output: {
     path: __dirname + '/public/assets',
     filename: "[name].js",
-    publicPath: "http://localhost:8081/assets"
+    publicPath: "http://localhost:8080/assets"
   }
 };
 
