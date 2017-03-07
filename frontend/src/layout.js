@@ -3,9 +3,11 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppBar from 'material-ui/AppBar';
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
+import Paper from 'material-ui/Paper';
+import WelcomePage from './welcome_page';
 import './layout.css';
 
-export default class Layout extends React.Component {
+class Layout extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -19,6 +21,10 @@ export default class Layout extends React.Component {
     });
   }
 
+  currentPage = () => {
+    return <WelcomePage />;
+  }
+
   render() {
     return <MuiThemeProvider>
         <div>
@@ -27,7 +33,12 @@ export default class Layout extends React.Component {
             <AppBar title="Home Budget" onTouchTap={this.menuIconClick} iconElementLeft={<div></div>} />
             <MenuItem>Compare costs with transactions</MenuItem>
           </Drawer>
+          <Paper zDepth={1} className="page-container">
+            {this.currentPage()}
+          </Paper>
         </div>
       </MuiThemeProvider>;
   }
 }
+
+export default Layout;
