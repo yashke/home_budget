@@ -7,7 +7,8 @@ var config = {
   },
   module: {
     loaders: [
-      { test: /\.js$/, exclude: /node_modules/, loaders: ["react-hot-loader", "babel-loader"] }
+      { test: /\.js$/, exclude: /node_modules/, loaders: ["react-hot-loader", "babel-loader"] },
+      { test: /\.css$/, loaders: ["style-loader", "css-loader"] }
     ]
   },
   output: {
