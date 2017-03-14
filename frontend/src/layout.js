@@ -5,7 +5,7 @@ import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
 import Paper from 'material-ui/Paper';
 import WelcomePage from './welcome_page';
-import CompareCostsWithTransactionsPage from './compare_costs_with_transactions_page';
+import UpdateAccountsBalancesPage from './update_accounts_balances_page';
 import './layout.css';
 
 
@@ -23,16 +23,16 @@ class Layout extends React.Component {
     });
   }
 
-  onCompareLinkClick = (e) => {
+  onUpdateAccountsBalances = (e) => {
     this.setState({
-      currentPage: "COMPARE_COSTS_WITH_TRANSACTIONS"
+      currentPage: "UPDATE_ACCOUNTS_BALANCES"
     });
   }
 
   currentPage = () => {
     switch (this.state.currentPage) {
-      case "COMPARE_COSTS_WITH_TRANSACTIONS":
-        return <CompareCostsWithTransactionsPage />
+      case "UPDATE_ACCOUNTS_BALANCES":
+        return <UpdateAccountsBalancesPage />
       default:
         return <WelcomePage />;
     }
@@ -44,7 +44,7 @@ class Layout extends React.Component {
           <AppBar title="Home Budget" onLeftIconButtonTouchTap={this.menuIconClick} />
           <Drawer open={this.state.drawerOpened}>
             <AppBar title="Home Budget" onTouchTap={this.menuIconClick} iconElementLeft={<div></div>} />
-            <MenuItem onTouchTap={this.onCompareLinkClick}>Compare costs with transactions</MenuItem>
+            <MenuItem onTouchTap={this.onUpdateAccountsBalances}>Update accounts balances</MenuItem>
           </Drawer>
           <Paper zDepth={1} className="page-container">
             {this.currentPage()}
