@@ -3,7 +3,8 @@ var path = require('path');
 var config = {
   context: __dirname + '/public/assets',
   entry: {
-    'index': ['../../src/index.js']
+    'index': ['../../src/index.js'],
+    'server_mock': ['../../src/server_mock.js']
   },
   module: {
     loaders: [
@@ -15,6 +16,11 @@ var config = {
     path: __dirname + '/public/assets',
     filename: "[name].js",
     publicPath: "http://localhost:8080/assets"
+  },
+  devServer: {
+    headers: {
+      "Service-Worker-Allowed": "/"
+    }
   }
 };
 

@@ -22,8 +22,12 @@
     "react-dom": "^15.4.2",
     "react-hot-loader": "^1.3.1",
     "react-tap-event-plugin": "^2.0.1",
+    "service-mocker": "^1.1.0",
     "style-loader": "^0.13.2",
     "webpack": "^2.2.1",
     "webpack-dev-server": "^2.4.1"
+  },
+  "dependencies": {
+    "react-dropzone": "^3.11.1"
   }
 }

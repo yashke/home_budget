@@ -1,10 +1,5 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import Layout from './layout';
-import injectTapEventPlugin from 'react-tap-event-plugin';
+import { createClient } from 'service-mocker/client';
+import startUp from './startup';
 
-injectTapEventPlugin()
-
-let root = document.getElementById("container");
-
-ReactDOM.render(<Layout />, root);
+const client = createClient('/assets/server_mock.js');
+client.ready.then(startUp);
