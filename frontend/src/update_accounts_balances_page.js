@@ -1,10 +1,10 @@
 import React from 'react';
 import Dropzone from 'react-dropzone';
-import addFiles from './backend';
+import { addFiles } from './backend';
 
 class UpdateAccountsBalancesPage extends React.Component {
   onDrop = (files) => {
-    console.dir(files);
+    addFiles(files);
   }
 
   render() {
