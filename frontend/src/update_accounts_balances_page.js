@@ -4,7 +4,9 @@ import { addFiles } from './backend';
 
 class UpdateAccountsBalancesPage extends React.Component {
   onDrop = (files) => {
-    addFiles(files);
+    addFiles(files).then((accounts) => {
+      console.dir(accounts);
+    });
   }
 
   render() {
