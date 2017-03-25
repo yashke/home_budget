@@ -1,14 +1,33 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Layout from './layout';
+import { createStore, applyMiddleware } from 'redux';
+import { connect, Provider } from 'react-redux';
+import thunkMiddleware from 'redux-thunk';
 import injectTapEventPlugin from 'react-tap-event-plugin';
+import state from './state';
+import Layout from './layout';
+import { loadMenu } from './actions/menu';
+
+function hookUpState(state) {
+  return {
+    menu: state.menu,
+    drawer: state.drawer
+  };
+}
 
 function startUp() {
-  injectTapEventPlugin()
-
+  let store = createStore(state, applyMiddleware(thunkMiddleware));
   let root = document.getElementById("container");
+  let MainComponentWithState = connect(hookUpState)(Layout);
 
-  ReactDOM.render(<Layout />, root);
+  store.dispatch(loadMenu());
+
+  injectTapEventPlugin();
+  ReactDOM.render(
+    <Provider store={store}>
+      <MainComponentWithState />
+    </Provider>
+  , root);
 }
 
 export default startUp;

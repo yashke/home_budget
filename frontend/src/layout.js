@@ -6,31 +6,20 @@ import MenuItem from 'material-ui/MenuItem';
 import Paper from 'material-ui/Paper';
 import WelcomePage from './welcome_page';
 import UpdateAccountsBalancesPage from './update_accounts_balances_page';
+import { toggleDrawer } from './actions/drawer';
 import './layout.css';
 
 
 class Layout extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      drawerOpened: false
-    }
-  }
-
   menuIconClick = (e) => {
-    this.setState({
-      drawerOpened: !this.state.drawerOpened
-    });
+    this.props.dispatch(toggleDrawer())
   }
 
   onUpdateAccountsBalances = (e) => {
-    this.setState({
-      currentPage: "UPDATE_ACCOUNTS_BALANCES"
-    });
   }
 
   currentPage = () => {
-    switch (this.state.currentPage) {
+    switch (this.props.menu.currentPage) {
       case "UPDATE_ACCOUNTS_BALANCES":
         return <UpdateAccountsBalancesPage />
       default:
@@ -42,7 +31,7 @@ class Layout extends React.Component {
     return <MuiThemeProvider>
         <div>
           <AppBar title="Home Budget" onLeftIconButtonTouchTap={this.menuIconClick} />
-          <Drawer open={this.state.drawerOpened}>
+          <Drawer open={this.props.drawer}>
             <AppBar title="Home Budget" onTouchTap={this.menuIconClick} iconElementLeft={<div></div>} />
             <MenuItem onTouchTap={this.onUpdateAccountsBalances}>Update accounts balances</MenuItem>
           </Drawer>
