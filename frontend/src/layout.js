@@ -1,12 +1,12 @@
+import { map } from 'lodash';
 import React from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppBar from 'material-ui/AppBar';
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
 import Paper from 'material-ui/Paper';
-import WelcomePage from './welcome_page';
-import UpdateAccountsBalancesPage from './update_accounts_balances_page';
-import { toggleDrawer } from './actions/drawer';
+import { closeDrawer, toggleDrawer } from './actions/drawer';
+import { goToPage } from './actions/menu';
 import './layout.css';
 
 
@@ -15,16 +15,21 @@ class Layout extends React.Component {
     this.props.dispatch(toggleDrawer())
   }
 
-  onUpdateAccountsBalances = (e) => {
+  onMenuItemTap = (page) => {
+    return (e) => {
+      this.props.dispatch(closeDrawer(page))
+      this.props.dispatch(goToPage(page))
+    }
   }
 
   currentPage = () => {
-    switch (this.props.menu.currentPage) {
-      case "UPDATE_ACCOUNTS_BALANCES":
-        return <UpdateAccountsBalancesPage />
-      default:
-        return <WelcomePage />;
-    }
+    return React.createElement(this.props.menu.currentPage.container);
+  }
+
+  renderMenuItems = () => {
+    return map(this.props.menu.pages, (page, i) => {
+      return <MenuItem onTouchTap={this.onMenuItemTap(page)} key={"menu-item-" + i}>{page.label}</MenuItem>;
+    });
   }
 
   render() {
@@ -33,7 +38,7 @@ class Layout extends React.Component {
           <AppBar title="Home Budget" onLeftIconButtonTouchTap={this.menuIconClick} />
           <Drawer open={this.props.drawer}>
             <AppBar title="Home Budget" onTouchTap={this.menuIconClick} iconElementLeft={<div></div>} />
-            <MenuItem onTouchTap={this.onUpdateAccountsBalances}>Update accounts balances</MenuItem>
+            {this.renderMenuItems()}
           </Drawer>
           <Paper zDepth={1} className="page-container">
             {this.currentPage()}
