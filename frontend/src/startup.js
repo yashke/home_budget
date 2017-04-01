@@ -11,7 +11,8 @@ import { loadMenu } from './actions/menu';
 function hookUpState(state) {
   return {
     menu: state.menu,
-    drawer: state.drawer
+    drawer: state.drawer,
+    bank: state.bank
   };
 }
 

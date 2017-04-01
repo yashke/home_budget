@@ -1,12 +1,10 @@
 import React from 'react';
 import Dropzone from 'react-dropzone';
-import { addFiles } from './backend';
+import { uploadAccountBalances } from './actions/bank';
 
 class UpdateAccountsBalancesPage extends React.Component {
   onDrop = (files) => {
-    addFiles(files).then((accounts) => {
-      console.dir(accounts);
-    });
+    this.context.dispatch(uploadAccountBalances(files));
   }
 
   render() {
@@ -17,5 +15,10 @@ class UpdateAccountsBalancesPage extends React.Component {
       </div>;
   }
 }
+
+UpdateAccountsBalancesPage.contextTypes = {
+  dispatch: React.PropTypes.func
+};
+
 
 export default UpdateAccountsBalancesPage;

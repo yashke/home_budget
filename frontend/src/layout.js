@@ -11,6 +11,12 @@ import './layout.css';
 
 
 class Layout extends React.Component {
+  getChildContext = () => {
+    return {
+      dispatch: this.props.dispatch
+    }
+  }
+
   menuIconClick = (e) => {
     this.props.dispatch(toggleDrawer())
   }
@@ -23,7 +29,7 @@ class Layout extends React.Component {
   }
 
   currentPage = () => {
-    return React.createElement(this.props.menu.currentPage.container);
+    return React.createElement(this.props.menu.currentPage.container, this.props);
   }
 
   renderMenuItems = () => {
@@ -47,5 +53,9 @@ class Layout extends React.Component {
       </MuiThemeProvider>;
   }
 }
+
+Layout.childContextTypes = {
+  dispatch: React.PropTypes.func
+};
 
 export default Layout;
