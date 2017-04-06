@@ -5,7 +5,7 @@ EXPOSE 8080
 
 WORKDIR /home/app
 
-COPY . /home/app
+COPY src/home_budget /home/app/src/home_budget
 
 RUN npm install && npm build
 
