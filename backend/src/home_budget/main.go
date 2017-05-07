@@ -26,5 +26,5 @@ func welcomeHandler(writer http.ResponseWriter, request *http.Request) {
 
 func parseUploadedFile(uploadedFile *multipart.FileHeader) {
   file, _ := uploadedFile.Open()
-  fmt.Println(file)
+  fmt.Println(parseMbankFile(file))
 }
