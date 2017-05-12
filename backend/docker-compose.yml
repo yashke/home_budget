@@ -1,0 +1,15 @@
+version: '2'
+services:
+  backend:
+    build: .
+    ports:
+      - "8080:80"
+    volumes:
+      - "$PWD/src/home_budget:/go/src/home_budget"
+  postgresql:
+    image: "postgres:9.6.2-alpine"
+    environment:
+      - POSTGRES_PASSWORD=secret123secret
+      - POSTGRES_USER=home_budget
+    volumes:
+      - "$PWD/.docker/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d"
