@@ -6,10 +6,16 @@ services:
       - "8080:80"
     volumes:
       - "$PWD/src/home_budget:/go/src/home_budget"
+    environment:
+      - POSTGRES_HOSTNAME=postgresql
+      - POSTGRES_PASSWORD=secret123secret
+      - POSTGRES_USER=home_budget
+      - POSTGRES_DB=home_budget
+    depends_on:
+      - postgresql
   postgresql:
     image: "postgres:9.6.2-alpine"
     environment:
       - POSTGRES_PASSWORD=secret123secret
       - POSTGRES_USER=home_budget
-    volumes:
-      - "$PWD/.docker/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d"
+      - POSTGRES_DB=home_budget
