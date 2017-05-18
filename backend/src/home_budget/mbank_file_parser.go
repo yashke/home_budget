@@ -10,9 +10,10 @@ import (
   "log"
   "regexp"
   "strconv"
+  "time"
 )
 
-func parseMbankFile(file multipart.File) (int64) {
+func parseMbankFile(file multipart.File) (AccountBalance) {
   rawHtml := loadHtmlFromFile(file)
   fixedHtml := fixHtml(rawHtml)
 
@@ -23,6 +24,16 @@ func parseMbankFile(file multipart.File) (int64) {
     log.Fatal(err)
   }
 
+  accountId := fetchAccountId(root)
+  balanceInCents := fetchClosingBalance(root)
+  lastDay := fetchBalanceDate(root)
+
+  accountBalance := AccountBalance{AccountId: accountId, BalanceInCents: balanceInCents, BalanceCurrency: "PLN", LastDay: lastDay}
+
+  return accountBalance
+}
+
+func fetchClosingBalance(root *xmlpath.Node) (int64) {
   xpath := xmlpath.MustCompile("//table[3]//tr[5]//table//tr")
   iterator := xpath.Iter(root)
   var last *xmlpath.Node
@@ -30,6 +41,22 @@ func parseMbankFile(file multipart.File) (int64) {
     last = iterator.Node()
   }
   return parseBalanceFromSummary(last.String())
+}
+
+func fetchAccountId(root *xmlpath.Node) (string) {
+  xpath := xmlpath.MustCompile("//table[3]//tr[3]//table//tr[4]//td[2]")
+  value, _ := xpath.String(root)
+  return value
+}
+
+func fetchBalanceDate(root *xmlpath.Node) (time.Time) {
+  xpath := xmlpath.MustCompile("//table[3]//tr[1]//h5")
+  balanceDateString, _ := xpath.String(root)
+  balanceDateRegexp := regexp.MustCompile("do \\d{2}-\\d{2}-\\d{4}")
+  balanceWideDateString := balanceDateRegexp.FindString(balanceDateString)
+  balanceDate := strings.Replace(balanceWideDateString, "do ", "", 1)
+  date, _ := time.Parse("02-01-2006", balanceDate)
+  return date
 }
 
 func loadHtmlFromFile(file multipart.File) (string) {

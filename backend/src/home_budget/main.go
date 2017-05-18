@@ -5,6 +5,7 @@ import (
   "mime/multipart"
   "fmt"
   "os"
+  "log"
   "github.com/gorilla/mux"
   "github.com/jinzhu/gorm"
   _ "github.com/jinzhu/gorm/dialects/postgres"
@@ -20,24 +21,31 @@ func main() {
   db := initializeDb()
   defer db.Close()
   router := mux.NewRouter()
-  router.HandleFunc("/account_balances", welcomeHandler)
+  router.HandleFunc("/account_balances", addDbToHttpHandler(db, welcomeHandler))
   http.Handle("/", router)
   http.ListenAndServe("0.0.0.0:80", nil)
 }
 
-func welcomeHandler(writer http.ResponseWriter, request *http.Request) {
+func addDbToHttpHandler(db *gorm.DB, withDbHandler func(*gorm.DB, http.ResponseWriter, *http.Request)) http.HandlerFunc {
+  return func(writer http.ResponseWriter, request *http.Request) {
+    withDbHandler(db, writer, request)
+  }
+}
+
+func welcomeHandler(db *gorm.DB, writer http.ResponseWriter, request *http.Request) {
   request.ParseMultipartForm(32 << 20)
   form := request.MultipartForm
   uploadedFiles := form.File["file[]"]
 
   for i, _ := range uploadedFiles {
-    parseUploadedFile(uploadedFiles[i])
+    accountBalance := parseUploadedFile(uploadedFiles[i])
+    log.Println(db.Create(&accountBalance))
   }
 }
 
-func parseUploadedFile(uploadedFile *multipart.FileHeader) {
+func parseUploadedFile(uploadedFile *multipart.FileHeader) (AccountBalance) {
   file, _ := uploadedFile.Open()
-  fmt.Println(parseMbankFile(file))
+  return parseMbankFile(file)
 }
 
 func loadDbConfig() string {
