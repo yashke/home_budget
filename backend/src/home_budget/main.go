@@ -46,6 +46,7 @@ func welcomeHandler(db *gorm.DB, writer http.ResponseWriter, request *http.Reque
   }
 
   jsonResponse, _ := json.Marshal(serializedAccountBalances)
+  writer.Header().Set("Content-Type", "application/json")
   writer.Write(jsonResponse)
 }
 
