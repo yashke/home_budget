@@ -5,7 +5,7 @@ import (
   "mime/multipart"
   "fmt"
   "os"
-  "log"
+  "encoding/json"
   "github.com/gorilla/mux"
   "github.com/jinzhu/gorm"
   _ "github.com/jinzhu/gorm/dialects/postgres"
@@ -36,11 +36,17 @@ func welcomeHandler(db *gorm.DB, writer http.ResponseWriter, request *http.Reque
   request.ParseMultipartForm(32 << 20)
   form := request.MultipartForm
   uploadedFiles := form.File["file[]"]
+  serializedAccountBalances := []serializedAccountBalance{}
 
   for i, _ := range uploadedFiles {
     accountBalance := parseUploadedFile(uploadedFiles[i])
-    log.Println(db.Create(&accountBalance))
+    db.Create(&accountBalance)
+    serializedAccountBalance := serializeAccountBalance(accountBalance)
+    serializedAccountBalances = append(serializedAccountBalances, serializedAccountBalance)
   }
+
+  jsonResponse, _ := json.Marshal(serializedAccountBalances)
+  writer.Write(jsonResponse)
 }
 
 func parseUploadedFile(uploadedFile *multipart.FileHeader) (AccountBalance) {

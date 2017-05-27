@@ -13,3 +13,19 @@ type AccountBalance struct {
   BalanceInCents int64
   BalanceCurrency string `gorm:"size:3"`
 }
+
+type serializedAccountBalance struct {
+  AccountId string `json:"accountId"`
+  BalanceInCents int64 `json:"balanceInCents"`
+  BalanceCurrency string `json:"balanceCurrency"`
+  LastDay time.Time `json:"lastDay"`
+}
+
+func serializeAccountBalance(accountBalance AccountBalance) (serializedAccountBalance) {
+  serialized := serializedAccountBalance{}
+  serialized.AccountId = accountBalance.AccountId
+  serialized.BalanceInCents = accountBalance.BalanceInCents
+  serialized.BalanceCurrency = accountBalance.BalanceCurrency
+  serialized.LastDay = accountBalance.LastDay
+  return serialized
+}
