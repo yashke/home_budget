@@ -46,6 +46,7 @@ func fetchClosingBalance(root *xmlpath.Node) (int64) {
 func fetchAccountId(root *xmlpath.Node) (string) {
   xpath := xmlpath.MustCompile("//table[3]//tr[3]//table//tr[4]//td[2]")
   value, _ := xpath.String(root)
+  value = strings.Trim(value, " ")
   return value
 }
 
